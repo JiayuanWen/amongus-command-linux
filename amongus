@@ -1,0 +1,161 @@
+#!/bin/bash
+
+#Helper functions
+newline()
+{
+    echo ""
+}
+
+#Initial values for fail safe
+MONTH_BIRTH=0
+DAY_BIRTH=0
+
+#Get flag values
+while getopts m:d:h flag
+do
+    case "${flag}" in
+        m)  month_set="${OPTARG}";;
+        d)  day_set="${OPTARG}";;
+        h)  display_help=true;;
+        #Handles flag missing argument
+        ?)  newline
+            echo "Run \"amongus -h\" for help"
+            newline
+            exit 1
+            ;;
+    esac
+done
+
+#Get current date
+MONTH=`date +%m`
+DAY=`date +%d`
+
+#Check if user ran flag with root
+if [ "$EUID" -ne 0 ] && [[ -n "$month_set" ]] || [[ -n "$day_set" ]] && [ "$EUID" -ne 0 ]
+then
+    newline
+    echo "Error: Flag -m and -d must be used with root access."
+    newline
+    echo "Run \"amongus -h\" for help"
+    newline
+    exit 1
+fi
+
+#Check if user used -d and -m flag together. Notify of missing flags
+if [ "$EUID" -eq 0 ]
+then
+touch /usr/bin/amongusBM.txt
+touch /usr/bin/amongusBD.txt
+    if [[ -n "$month_set" ]]
+    then
+        if [[ -n "$day_set" ]]
+        then
+            echo "$month_set" > /usr/bin/amongusBM.txt
+            echo "$day_set" > /usr/bin/amongusBD.txt
+        else
+            newline
+            echo "Error: Missing -d flag"
+            newline
+            echo "Run \"amongus -h\" for help"
+            newline
+            exit 1
+        fi
+    #else
+    #    newline
+    #    echo "Error: Missing -d flag"
+    #    newline
+    #    echo "Run \"amongus -h\" for help"
+    #    newline
+    #    exit 1
+    fi
+
+    if [[ -n "$day_set" ]]
+    then
+        if [[ -n "$month_set" ]]
+        then
+            echo "$month_set" > /usr/bin/amongusBM.txt
+            echo "$day_set" > /usr/bin/amongusBD.txt
+        else
+            newline
+            echo "Error: Missing -m flag"
+            newline
+            echo "Run \"amongus -h\" for help"
+            newline
+            exit 1
+        fi
+    else
+        newline
+        echo "Error: Missing -m flag"
+        newline
+        echo "Run \"amongus -h\" for help"
+        newline
+        exit 1
+    fi
+fi
+
+#Set birthday to flag values if exist
+if [ -e /usr/bin/amongusBM.txt ] && [ -e /usr/bin/amongusBD.txt ]
+then
+MONTH_BIRTH=`cat /usr/bin/amongusBM.txt`
+DAY_BIRTH=`cat /usr/bin/amongusBD.txt`
+fi
+
+#For debug purposes
+#echo "$MONTH_BIRTH"
+#echo "$DAY_BIRTH"
+
+#Display help instead of sus if -h flag
+if [ "$display_help" = true ]
+then
+    for i in 1 2
+    do
+        newline
+    done
+    echo "Flags:"
+    echo "  -m    Set your birthday month. Argument: int"
+    echo "  -d    Set your birthday day. Argument: int"
+    echo " * The flag -m and -d must be used together and with root access."
+    echo "  -h    Display help. Argument: none"
+    for i in 1
+    do
+        newline
+    done
+    echo "Example: \"\$ sudo amongus -m 6 -d 3\" for June 3rd"
+    for i in 1 2
+    do
+        newline
+    done
+    exit 0
+fi
+
+#Print an sussy astronaut. Wear hat on user's birthday
+if [ $MONTH -eq $MONTH_BIRTH ] && [ $DAY -eq $DAY_BIRTH ]
+then
+    echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣴⣆⣠⣤⠀⠀⠀⠀⠀⠀⠀      " && sleep 0.1
+    echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣻⣿⣯⣘⠹⣧⣤⡀⠀⠀⠀⠀⠀      " && sleep 0.1
+    echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠛⠿⢿⣿⣷⣾⣯⠉⠀⠀⠀⠀⠀⠀      " && sleep 0.1
+    echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⠜⣿⡍⠀⠀⠀⠀⠀⠀⠀      " && sleep 0.1
+    echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⠁⠀⠘⣿⣆⠀⠀⠀⠀⠀⠀      " && sleep 0.1
+    echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⡟⠃⡄⠀⠘⢿⣆⠀⠀⠀⠀⠀      " && sleep 0.1
+    echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⣿⣁⣋⣈ ⣤⣮⣿⣧⡀⠀        " && sleep 0.1
+fi
+echo "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀" && sleep 0.1
+echo "⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀" && sleep 0.1
+echo "⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀" && sleep 0.1
+echo "⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀" && sleep 0.1
+echo "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀" && sleep 0.1
+echo "⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀" && sleep 0.1
+echo "⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀" && sleep 0.1
+echo "⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀" && sleep 0.1
+echo "⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀" && sleep 0.1
+echo "⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀" && sleep 0.1
+echo "⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀" && sleep 0.1
+echo "⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀" && sleep 0.1
+echo "⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀" && sleep 0.1
+echo "⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀" && sleep 0.1
+echo "⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀" && sleep 0.1
+echo "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀" && sleep 0.1
+echo "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀" && sleep 0.1
+echo "⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀" && sleep 0.1
+echo "⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀" && sleep 0.1
+
