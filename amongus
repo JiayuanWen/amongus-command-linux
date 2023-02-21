@@ -44,17 +44,17 @@ fi
 #Check if user used -d and -m flag together. Notify of missing flags
 if [ "$EUID" -eq 0 ]
 then
-mkdir ~/.local/share/amongus
-mkdir ~/.local/share/amongus/cfg
+mkdir "/home/$(logname)/.local/share/amongus"
+mkdir "/home/$(logname)/.local/share/amongus/cfg"
 
-touch ~/.local/share/amongus/cfg/amongusBM.txt
-touch ~/.local/share/amongus/cfg/amongusBD.txt
+touch "/home/$(logname)/.local/share/amongus/cfg/amongusBM.txt"
+touch "/home/$(logname)/.local/share/amongus/cfg/amongusBD.txt"
     if [[ -n "$month_set" ]]
     then
         if [[ -n "$day_set" ]]
         then
-            echo "$month_set" > ~/.local/share/amongus/cfg/amongusBM.txt
-            echo "$day_set" > ~/.local/share/amongus/cfg/amongusBD.txt
+            echo "$month_set" > "/home/$(logname)/.local/share/amongus/cfg/amongusBM.txt"
+            echo "$day_set" > "/home/$(logname)/.local/share/amongus/cfg/amongusBD.txt"
         else
             newline
             echo "Error: Missing -d flag"
@@ -76,8 +76,8 @@ touch ~/.local/share/amongus/cfg/amongusBD.txt
     then
         if [[ -n "$month_set" ]]
         then
-            echo "$month_set" > ~/.local/share/amongus/cfg/amongusBM.txt
-            echo "$day_set" > ~/.local/share/amongus/cfg/amongusBD.txt
+            echo "$month_set" > "/home/$(logname)/.local/share/amongus/cfg/amongusBM.txt"
+            echo "$day_set" > "/home/$(logname)/.local/share/amongus/cfg/amongusBD.txt"
         else
             newline
             echo "Error: Missing -m flag"
@@ -99,8 +99,8 @@ fi
 #Set birthday to flag values if exist
 if [ -e /usr/bin/amongusBM.txt ] && [ -e /usr/bin/amongusBD.txt ]
 then
-MONTH_BIRTH=`cat ~/.local/share/amongus/cfg/amongusBM.txt`
-DAY_BIRTH=`cat ~/.local/share/amongus/cfg/amongusBD.txt`
+MONTH_BIRTH=`cat /home/$(logname)/.local/share/amongus/cfg/amongusBM.txt`
+DAY_BIRTH=`cat /home/$(logname)/.local/share/amongus/cfg/amongusBD.txt`
 fi
 
 #For debug purposes
