@@ -28,7 +28,11 @@ Linux script that does sussy thing
 3. Grand the binary execution permission: ```sudo chown +x ./amongus```
 4. Move the binary to /usr/bin folder: ```sudo cp ./amongus /usr/bin```
 
+Now you should be able to type the command "amongus" in the terminal.
+
+<!--
 ## Usage
 Open a terminal anywhere and type ```amongus```
 
 The script also does something special with your birthday, type ```amongus -h``` for more info
+-->
