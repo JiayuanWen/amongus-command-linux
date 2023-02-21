@@ -27,8 +27,8 @@ do
 done
 
 #Get current date
-MONTH=`date +%m`
-DAY=`date +%d`
+MONTH=`date +%-m`
+DAY=`date +%-d`
 
 #Check if user ran flag with root
 if [ "$EUID" -ne 0 ] && [[ -n "$month_set" ]] || [[ -n "$day_set" ]] && [ "$EUID" -ne 0 ]
@@ -44,11 +44,15 @@ fi
 #Check if user used -d and -m flag together. Notify of missing flags
 if [ "$EUID" -eq 0 ]
 then
-mkdir "/home/$(logname)/.local/share/amongus"
-mkdir "/home/$(logname)/.local/share/amongus/cfg"
+    if [ ! -e /home/$(logname)/.local/share/amongus/cfg/amongusBM.txt ] && [ ! -e /home/$(logname)/.local/share/amongus/cfg/amongusBM.txt ]
+    then
+        mkdir "/home/$(logname)/.local/share/amongus"
+        mkdir "/home/$(logname)/.local/share/amongus/cfg"
+    fi
 
-touch "/home/$(logname)/.local/share/amongus/cfg/amongusBM.txt"
-touch "/home/$(logname)/.local/share/amongus/cfg/amongusBD.txt"
+    touch "/home/$(logname)/.local/share/amongus/cfg/amongusBM.txt"
+    touch "/home/$(logname)/.local/share/amongus/cfg/amongusBD.txt"
+
     if [[ -n "$month_set" ]]
     then
         if [[ -n "$day_set" ]]
@@ -97,7 +101,7 @@ touch "/home/$(logname)/.local/share/amongus/cfg/amongusBD.txt"
 fi
 
 #Set birthday to flag values if exist
-if [ -e /usr/bin/amongusBM.txt ] && [ -e /usr/bin/amongusBD.txt ]
+if [ -e /home/$(logname)/.local/share/amongus/cfg/amongusBM.txt ] && [ -e /home/$(logname)/.local/share/amongus/cfg/amongusBM.txt ]
 then
 MONTH_BIRTH=`cat /home/$(logname)/.local/share/amongus/cfg/amongusBM.txt`
 DAY_BIRTH=`cat /home/$(logname)/.local/share/amongus/cfg/amongusBD.txt`
