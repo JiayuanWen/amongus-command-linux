@@ -112,8 +112,8 @@ then
         newline
     done
     echo "Flags:"
-    echo "  -m    Set your birthday month. Argument: int"
-    echo "  -d    Set your birthday day. Argument: int"
+    echo "  -m    Set your birthday month. Argument: integer"
+    echo "  -d    Set your birthday day. Argument: integer"
     echo " * The flag -m and -d must be used together and with root access."
     echo "  -h    Display help. Argument: none"
     for i in 1
@@ -122,6 +122,11 @@ then
     done
     echo "Example: \"\$ sudo amongus -m 6 -d 3\" for June 3rd"
     for i in 1 2
+    do
+        newline
+    done
+    echo "Once -m and -d is set, you can run \"\$ amongus\" without sudo"
+    for i in 1
     do
         newline
     done
